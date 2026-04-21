@@ -12,6 +12,7 @@ from qfluentwidgets import (PushButton, PrimaryPushButton, LineEdit, ComboBox,
                             FluentIcon, InfoBar, InfoBarPosition)
 
 from utils.tasks import AVAILABLE_TASKS
+from utils.paths import root_path
 from module.localization import tr
 
 # 仅主页可用的特殊操作（不在 AVAILABLE_TASKS 中）
@@ -276,7 +277,7 @@ class CardEditorWidget(QFrame):
 
     def _choose_icon(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            self, tr("选择图标"), os.getcwd(),
+            self, tr("选择图标"), root_path(),
             "Images (*.png *.jpg *.jpeg *.bmp);;All Files (*)")
         if file_path:
             self.icon_path = file_path

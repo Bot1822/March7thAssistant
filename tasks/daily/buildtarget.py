@@ -16,6 +16,7 @@ from module.notification.notification import NotificationLevel
 from module.localization import get_raw_instance_names
 from tasks.base.base import Base
 from utils.image_utils import ImageUtils
+from utils.paths import asset_path
 
 
 class BuildTargetHandler(ABC):
@@ -320,10 +321,7 @@ class DropHandler(BuildTargetHandler):
         if self._instance_drops:
             return self._instance_drops
 
-        if getattr(sys, "frozen", False):
-            file_path = os.path.join(os.path.dirname(sys.executable), "assets", "config", "instance_drops.json")
-        else:
-            file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "assets", "config", "instance_drops.json")
+        file_path = asset_path("config", "instance_drops.json")
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:

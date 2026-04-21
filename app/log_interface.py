@@ -19,6 +19,7 @@ from .common.style_sheet import StyleSheet
 from module.config import cfg
 from module.game import get_game_controller
 from utils.tasks import TASK_NAMES
+from utils.paths import root_path
 from .schedule_dialog import ScheduleManagerDialog
 from module.notification import notif
 from module.localization import tr as ltr
@@ -903,7 +904,7 @@ class LogInterface(ScrollArea):
 
         # 构建命令
         if getattr(sys, 'frozen', False):
-            executable_path = os.path.abspath("./March7th Assistant.exe")
+            executable_path = root_path("March7th Assistant.exe")
             if not os.path.exists(executable_path):
                 self.appendLog(self.tr("错误: 未找到可执行文件 March7th Assistant.exe") + "\n")
                 self.appendLog(self.tr("请将`小助手文件夹`加入杀毒软件排除项/白名单/信任区，然后重新解压覆盖一次") + "\n")
@@ -922,17 +923,17 @@ class LogInterface(ScrollArea):
             self.appendLog(f"命令: {executable_path} {command}\n")
         else:
             executable_path = sys.executable
-            main_script = os.path.abspath("main.py")
-            # 将工作目录设置为 main.py 所在目录，确保相对路径在子进程中有效
+            main_args = ["-m", "march7thassistant.cli", command]
+            # 将工作目录设置为项目根目录，确保相对路径在子进程中有效
             try:
-                cwd = os.path.dirname(main_script) or os.getcwd()
+                cwd = root_path()
                 if not os.path.exists(cwd):
                     cwd = os.getcwd()
                 self.process.setWorkingDirectory(cwd)
             except Exception:
                 pass
-            self.process.start(executable_path, [main_script, command])
-            self.appendLog(f"命令: {executable_path} {main_script} {command}\n")
+            self.process.start(executable_path, main_args)
+            self.appendLog(f"命令: {executable_path} {' '.join(main_args)}\n")
 
         # 如果设置了超时，使用可取消的单次 QTimer在超时后统一停止任务
         if timeout > 0:

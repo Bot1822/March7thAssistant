@@ -1,4 +1,5 @@
 from utils.command import subprocess_with_stdout
+from utils.paths import root_path
 import subprocess
 import sys
 import os
@@ -16,12 +17,13 @@ def execute_command_in_new_environment(command, use_windows_terminal=False):
     在新的环境中执行给定的命令。
     """
     if getattr(sys, 'frozen', False):
-        if not os.path.exists("./March7th Assistant.exe"):
+        executable_candidate = root_path("March7th Assistant.exe")
+        if not os.path.exists(executable_candidate):
             exception = Exception("未找到可执行文件：March7th Assistant.exe，\n请将`小助手文件夹`加入杀毒软件排除项/白名单/信任区后，\n然后重新解压覆盖一次")
             raise exception
 
-    executable_path = os.path.abspath("./March7th Assistant.exe") if getattr(sys, 'frozen', False) else sys.executable
-    main_script = [] if getattr(sys, 'frozen', False) else ["main.py"]
+    executable_path = root_path("March7th Assistant.exe") if getattr(sys, 'frozen', False) else sys.executable
+    main_script = [] if getattr(sys, 'frozen', False) else ["-m", "march7thassistant.cli"]
 
     if use_windows_terminal:
         # 尝试使用 Windows Terminal 执行命令

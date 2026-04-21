@@ -12,6 +12,7 @@ import os
 import json
 from module.config import cfg
 from module.localization import tr
+from utils.paths import asset_path
 
 
 def _strip_jsonc_comments(text: str) -> str:
@@ -83,7 +84,7 @@ SPECIAL_PROGRAMS = []
 _SPECIAL_BY_DISPLAY = {}
 _SPECIAL_BY_EXEC = {}
 try:
-    cfg_path = "./assets/config/special_programs.jsonc"
+    cfg_path = asset_path("config", "special_programs.jsonc")
     if os.path.exists(cfg_path):
         with open(cfg_path, 'r', encoding='utf-8') as f:
             raw = f.read()

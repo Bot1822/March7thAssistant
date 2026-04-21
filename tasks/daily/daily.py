@@ -18,6 +18,7 @@ from tasks.weekly.echoofwar import Echoofwar
 from tasks.daily.buildtarget import BuildTarget
 from tasks.daily.redemption import Redemption
 from utils.color import red, green, yellow
+from utils.paths import asset_path
 import datetime
 
 
@@ -166,7 +167,7 @@ class Daily:
         log.hr("开始查询日常任务完成情况", 1)
         screen.change_to("guide2")
 
-        tasks = Tasks("./assets/config/task_mappings.json")
+        tasks = Tasks(asset_path("config", "task_mappings.json"))
         tasks.start()
 
         cfg.set_value("daily_tasks", tasks.daily_tasks)

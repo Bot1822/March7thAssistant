@@ -156,36 +156,26 @@ class GameControllerBase:
         try:
             # 获取脚本所在目录
             script_dir = os.path.dirname(os.path.abspath(self.script_path))
-            # 保存当前工作目录
-            original_cwd = os.getcwd()
-
-            try:
-                # 切换到脚本所在目录
-                os.chdir(script_dir)
-
-                file_ext = os.path.splitext(self.script_path)[1].lower()
-                if file_ext == '.ps1':
-                    # PowerShell脚本
-                    subprocess.Popen(["powershell", "-ExecutionPolicy", "Bypass", "-File", self.script_path],
-                                     creationflags=subprocess.CREATE_NEW_CONSOLE)
-                    self.log_info(f"已启动PowerShell脚本：{self.script_path}")
-                elif file_ext == '.bat':
-                    # Batch脚本
-                    subprocess.Popen([self.script_path], shell=True,
-                                     creationflags=subprocess.CREATE_NEW_CONSOLE)
-                    self.log_info(f"已启动Batch脚本：{self.script_path}")
-                elif file_ext == '.exe':
-                    # 可执行文件
-                    subprocess.Popen([self.script_path],
-                                     creationflags=subprocess.CREATE_NEW_CONSOLE)
-                    self.log_info(f"已启动可执行文件：{self.script_path}")
-                else:
-                    self.log_warning(f"不支持的文件类型：{file_ext}")
-                    return False
-                return True
-            finally:
-                # 恢复原始工作目录
-                os.chdir(original_cwd)
+            file_ext = os.path.splitext(self.script_path)[1].lower()
+            if file_ext == '.ps1':
+                # PowerShell脚本
+                subprocess.Popen(["powershell", "-ExecutionPolicy", "Bypass", "-File", self.script_path],
+                                 cwd=script_dir, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                self.log_info(f"已启动PowerShell脚本：{self.script_path}")
+            elif file_ext == '.bat':
+                # Batch脚本
+                subprocess.Popen([self.script_path], shell=True,
+                                 cwd=script_dir, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                self.log_info(f"已启动Batch脚本：{self.script_path}")
+            elif file_ext == '.exe':
+                # 可执行文件
+                subprocess.Popen([self.script_path],
+                                 cwd=script_dir, creationflags=subprocess.CREATE_NEW_CONSOLE)
+                self.log_info(f"已启动可执行文件：{self.script_path}")
+            else:
+                self.log_warning(f"不支持的文件类型：{file_ext}")
+                return False
+            return True
         except Exception as e:
             self.log_error(f"启动脚本时发生错误：{str(e)}")
             return False

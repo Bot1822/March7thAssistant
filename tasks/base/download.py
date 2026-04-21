@@ -5,11 +5,12 @@ import requests
 import os
 
 from module.update.download_proxy import get_update_download_aria2_args, get_update_download_requests_proxies
+from utils.paths import asset_path
 
 
 def download_with_progress(download_url, save_path, use_update_proxy=False):
 
-    aria2_path = os.path.abspath("./assets/binary/aria2c.exe")
+    aria2_path = asset_path("binary", "aria2c.exe")
     proxies = urllib.request.getproxies() if not use_update_proxy else {}
     aria2_proxy_args = get_update_download_aria2_args() if use_update_proxy else []
     request_proxies = get_update_download_requests_proxies() if use_update_proxy else None

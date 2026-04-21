@@ -9,6 +9,7 @@ from utils.logger.logger import Logger
 from typing import Optional
 from utils.singleton import SingletonMeta
 from utils.image_utils import ImageUtils
+from utils.paths import from_root
 from module.game import get_game_controller
 from module.ocr import ocr
 
@@ -62,6 +63,10 @@ class Automation(metaclass=SingletonMeta):
             (size[0]) / width,
             (size[1]) / height,
         )
+
+    @staticmethod
+    def _resolve_path(path):
+        return from_root(path) if isinstance(path, str) else path
 
     def take_screenshot(self, crop=(0, 0, 1, 1), use_background_screenshot=None):
         """
@@ -117,14 +122,15 @@ class Automation(metaclass=SingletonMeta):
         :return: 最佳匹配位置和相似度。
         """
         try:
-            if cacheable and target in self.img_cache:
-                mask = self.img_cache[target]['mask']
-                template = self.img_cache[target]['template']
+            resolved_target = self._resolve_path(target)
+            if cacheable and resolved_target in self.img_cache:
+                mask = self.img_cache[resolved_target]['mask']
+                template = self.img_cache[resolved_target]['template']
             else:
-                mask = ImageUtils.read_template_with_mask(target)  # 读取模板图片掩码
-                template = cv2.imread(target)  # 读取模板图片
+                mask = ImageUtils.read_template_with_mask(resolved_target)  # 读取模板图片掩码
+                template = cv2.imread(resolved_target)  # 读取模板图片
                 if cacheable:
-                    self.img_cache[target] = {'mask': mask, 'template': template}
+                    self.img_cache[resolved_target] = {'mask': mask, 'template': template}
             screenshot = cv2.cvtColor(np.array(self.screenshot), cv2.COLOR_BGR2RGB)  # 将截图转换为RGB
             if mask is not None:
                 matchVal, matchLoc = ImageUtils.scale_and_match_template(screenshot, template, threshold, scale_range, mask)  # 执行缩放并匹配模板
@@ -186,7 +192,8 @@ class Automation(metaclass=SingletonMeta):
         - 匹配的数量，或在出错时返回 None。
         """
         try:
-            template = cv2.imread(target, cv2.IMREAD_GRAYSCALE)
+            resolved_target = self._resolve_path(target)
+            template = cv2.imread(resolved_target, cv2.IMREAD_GRAYSCALE)
             if template is None:
                 raise ValueError("读取图片失败")
             bw_map = self.generate_black_white_map(pixel_bgr)
@@ -199,7 +206,8 @@ class Automation(metaclass=SingletonMeta):
 
     def find_image_with_multiple_targets(self, target, threshold, scale_range, relative=False):
         try:
-            template = cv2.imread(target, cv2.IMREAD_GRAYSCALE)
+            resolved_target = self._resolve_path(target)
+            template = cv2.imread(resolved_target, cv2.IMREAD_GRAYSCALE)
             if template is None:
                 raise ValueError("读取图片失败")
             screenshot = cv2.cvtColor(np.array(self.screenshot), cv2.COLOR_BGR2GRAY)
@@ -442,15 +450,16 @@ class Automation(metaclass=SingletonMeta):
         """获取或创建YOLO ONNX推理会话（带缓存）。"""
         if not hasattr(self, '_yolo_sessions'):
             self._yolo_sessions = {}
-        if model_path not in self._yolo_sessions:
+        resolved_model_path = self._resolve_path(model_path)
+        if resolved_model_path not in self._yolo_sessions:
             import onnxruntime as ort
             # providers = ort.get_available_providers()
             preferred = []
             # if "DmlExecutionProvider" in providers:
             #     preferred.append("DmlExecutionProvider")
             preferred.append("CPUExecutionProvider")
-            self._yolo_sessions[model_path] = ort.InferenceSession(model_path, providers=preferred)
-        return self._yolo_sessions[model_path]
+            self._yolo_sessions[resolved_model_path] = ort.InferenceSession(resolved_model_path, providers=preferred)
+        return self._yolo_sessions[resolved_model_path]
 
     def _yolo_preprocess(self, img, input_size=640):
         """YOLO letterbox预处理。返回 (input_tensor, scale)。"""
