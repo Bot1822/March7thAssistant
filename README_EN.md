@@ -135,6 +135,27 @@ git pull
 git submodule update --init --recursive
 ```
 
+If you are using `uv`, it is recommended to use the built-in `pyproject.toml` workflow directly:
+
+```cmd
+# Installation (using uv)
+git clone --recurse-submodules https://github.com/moesnow/March7thAssistant
+cd March7thAssistant
+uv sync
+
+# Launch the GUI
+uv run march7th-launcher
+
+# Show CLI help
+uv run march7th-assistant -h
+
+# Run all tasks
+uv run march7th-assistant
+
+# Run daily training
+uv run march7th-assistant daily
+```
+
 <details>
 <summary>Development Details</summary>
 
