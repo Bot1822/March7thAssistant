@@ -1,8 +1,10 @@
 import os
 import sys
 import argparse
-# 将当前工作目录设置为程序所在的目录，确保无论从哪里执行，其工作目录都正确设置为程序本身的位置，避免路径错误。
-os.chdir(os.path.dirname(sys.executable) if getattr(sys, 'frozen', False)else os.path.dirname(os.path.abspath(__file__)))
+from utils.paths import asset_path, set_working_directory
+
+# 将当前工作目录设置为运行根目录，避免资源路径依赖启动位置。
+set_working_directory()
 
 from utils.tasks import AVAILABLE_TASKS
 
@@ -198,7 +200,7 @@ def run_sub_task_update(action):
 
 
 def run_notify_action():
-    notif.notify(content=cfg.notify_template['TestMessage'], image="./assets/app/images/March7th.jpg", level=NotificationLevel.ALL)
+    notif.notify(content=cfg.notify_template['TestMessage'], image=asset_path("app", "images", "March7th.jpg"), level=NotificationLevel.ALL)
     pause_always()
     sys.exit(0)
 

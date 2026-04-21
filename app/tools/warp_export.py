@@ -14,6 +14,7 @@ import json
 import re
 import os
 from module.localization import tr
+from utils.paths import asset_path
 
 
 def srgf_to_uigf_hkrpg(srgf: dict) -> dict:
@@ -418,7 +419,7 @@ class WarpExport:
         self.info['export_timestamp'] = int(time.time())
         self.info['export_app'] = "March7thAssistant"
         try:
-            with open("./assets/config/version.txt", 'r', encoding='utf-8') as file:
+            with open(asset_path("config", "version.txt"), 'r', encoding='utf-8') as file:
                 version = file.read()
         except Exception:
             version = ""

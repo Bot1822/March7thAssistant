@@ -14,6 +14,7 @@ from openpyxl.utils import get_column_letter
 from module.localization import tr
 import time
 import sys
+from utils.paths import asset_path
 
 
 class WarpInterface(ScrollArea):
@@ -131,7 +132,7 @@ class WarpInterface(ScrollArea):
             warp.info['export_timestamp'] = int(time.time())
             warp.info['export_app'] = "March7thAssistant"
             try:
-                with open("./assets/config/version.txt", 'r', encoding='utf-8') as file:
+                with open(asset_path("config", "version.txt"), 'r', encoding='utf-8') as file:
                     version = file.read()
             except Exception:
                 version = ""

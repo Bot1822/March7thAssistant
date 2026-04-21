@@ -9,6 +9,7 @@ from module.localization import tr
 
 import markdown
 import sys
+from utils.paths import asset_path
 
 
 class ChangelogInterface(ScrollArea):
@@ -27,16 +28,16 @@ a {
 </style>
 """
         from module.config import cfg
-        changelog_file = "./assets/docs/Changelog.md"
+        changelog_file = asset_path("docs", "Changelog.md")
         if hasattr(cfg, 'ui_language_now'):
             if cfg.ui_language_now == "ko_KR":
                 import os
-                ko_changelog_file = "./assets/docs/Changelog_ko.md"
+                ko_changelog_file = asset_path("docs", "Changelog_ko.md")
                 if os.path.exists(ko_changelog_file):
                     changelog_file = ko_changelog_file
             elif cfg.ui_language_now == "en_US":
                 import os
-                en_changelog_file = "./assets/docs/Changelog_en.md"
+                en_changelog_file = asset_path("docs", "Changelog_en.md")
                 if os.path.exists(en_changelog_file):
                     changelog_file = en_changelog_file
         try:

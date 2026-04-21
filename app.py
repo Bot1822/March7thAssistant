@@ -1,7 +1,9 @@
 import os
 import sys
-# 将当前工作目录设置为程序所在的目录，确保无论从哪里执行，其工作目录都正确设置为程序本身的位置，避免路径错误。
-os.chdir(os.path.dirname(sys.executable) if getattr(sys, 'frozen', False)else os.path.dirname(os.path.abspath(__file__)))
+from utils.paths import set_working_directory
+
+# 将当前工作目录设置为运行根目录，避免资源路径依赖启动位置。
+set_working_directory()
 
 import ctypes
 import argparse

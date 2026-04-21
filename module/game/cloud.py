@@ -8,6 +8,7 @@ import base64
 import requests
 import time
 import io
+from utils.paths import asset_path
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, SessionNotCreatedException
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -354,7 +355,7 @@ class CloudGameController(GameControllerBase):
         """加载初始配置，去除初始引导，免责协议等弹窗"""
 
         try:
-            with open("assets/config/initial_local_storage.json", "r", encoding="utf-8") as f:
+            with open(asset_path("config", "initial_local_storage.json"), "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             # settings = json.loads(data["clgm_web_app_settings_hkrpg_cn"])

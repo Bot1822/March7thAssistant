@@ -20,6 +20,7 @@ from PIL import Image
 import numpy as np
 import os
 import sys
+from utils.paths import asset_path
 
 
 class BannerWidget(QWidget):
@@ -28,7 +29,7 @@ class BannerWidget(QWidget):
         self.menu = RoundMenu(parent=self)
         self.menu.addAction(QAction(tr("更换背景图片"), self, triggered=lambda: on_change_banner_image()))
 
-        self.default_banner_path = "./assets/app/images/bg37.jpg"
+        self.default_banner_path = asset_path("app", "images", "bg37.jpg")
         banner_path = cfg.get_value("banner_path", self.default_banner_path)
         if not os.path.exists(banner_path):
             banner_path = self.default_banner_path

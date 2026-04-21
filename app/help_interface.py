@@ -6,6 +6,7 @@ from .common.style_sheet import StyleSheet
 from module.localization import tr
 import markdown
 import sys
+from utils.paths import asset_path
 
 
 class HelpInterface(ScrollArea):
@@ -69,16 +70,16 @@ th, td {
 """
         # Load Tutorial based on language setting
         from module.config import cfg
-        tutorial_file = "./assets/docs/Tutorial.md"
+        tutorial_file = asset_path("docs", "Tutorial.md")
         if hasattr(cfg, 'ui_language_now'):
             if cfg.ui_language_now == "ko_KR":
                 import os
-                ko_file = "./assets/docs/Tutorial_ko.md"
+                ko_file = asset_path("docs", "Tutorial_ko.md")
                 if os.path.exists(ko_file):
                     tutorial_file = ko_file
             elif cfg.ui_language_now == "en_US":
                 import os
-                en_file = "./assets/docs/Tutorial_en.md"
+                en_file = asset_path("docs", "Tutorial_en.md")
                 if os.path.exists(en_file):
                     tutorial_file = en_file
         try:
@@ -105,16 +106,16 @@ a {
 </style>
 """
         # Load FAQ based on language setting
-        faq_file = "./assets/docs/FAQ.md"
+        faq_file = asset_path("docs", "FAQ.md")
         if hasattr(cfg, 'ui_language_now'):
             if cfg.ui_language_now == "ko_KR":
                 import os
-                ko_faq_file = "./assets/docs/FAQ_ko.md"
+                ko_faq_file = asset_path("docs", "FAQ_ko.md")
                 if os.path.exists(ko_faq_file):
                     faq_file = ko_faq_file
             elif cfg.ui_language_now == "en_US":
                 import os
-                en_faq_file = "./assets/docs/FAQ_en.md"
+                en_faq_file = asset_path("docs", "FAQ_en.md")
                 if os.path.exists(en_faq_file):
                     faq_file = en_faq_file
         try:
@@ -266,16 +267,16 @@ a {
 </style>
 """
         # Load Changelog based on language setting
-        changelog_file = "./assets/docs/Changelog.md"
+        changelog_file = asset_path("docs", "Changelog.md")
         if hasattr(cfg, 'ui_language_now'):
             if cfg.ui_language_now == "ko_KR":
                 import os
-                ko_changelog_file = "./assets/docs/Changelog_ko.md"
+                ko_changelog_file = asset_path("docs", "Changelog_ko.md")
                 if os.path.exists(ko_changelog_file):
                     changelog_file = ko_changelog_file
             elif cfg.ui_language_now == "en_US":
                 import os
-                en_changelog_file = "./assets/docs/Changelog_en.md"
+                en_changelog_file = asset_path("docs", "Changelog_en.md")
                 if os.path.exists(en_changelog_file):
                     changelog_file = en_changelog_file
         try:
