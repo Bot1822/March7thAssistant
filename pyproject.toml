@@ -65,5 +65,9 @@ Homepage = "https://github.com/moesnow/March7thAssistant"
 [tool.uv]
 package = true
 
+[tool.setuptools]
+py-modules = ["app", "main"]
+include-package-data = true
+
 [tool.setuptools.packages.find]
-include = ["app*", "module*", "tasks*", "utils*", "march7thassistant*"]
+include = ["app*", "module*", "tasks*", "utils*", "march7thassistant*", "assets*"]

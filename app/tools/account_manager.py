@@ -1,9 +1,10 @@
 import base64
 import os
 from utils.registry.gameaccount import gamereg_uid, gamereg_export, gamereg_import, gamereg_delete_all
+from utils.paths import settings_path
 from module.logger import log
 
-data_dir = "settings/accounts"
+data_dir = settings_path("accounts")
 xor_key = "TI4ftRSDaP63kBxxoLoZ5KpVmRBz00JikzLNweryzZ4wecWJxJO9tbxlH9YDvjAr"
 
 if not os.path.exists(data_dir):
